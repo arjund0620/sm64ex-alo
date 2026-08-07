@@ -1,0 +1,24 @@
+name: Build for Switch
+on: workflow_dispatch
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up devkitPro Docker
+        run: |
+          docker pull devkitpro/devkita64:latest
+
+      - name: Build Game inside Docker
+        run: |
+          docker run --rm -v ${{ github.workspace }}:/workspace -w /workspace devkitpro/devkita64:latest bash -c "
+            apt-get update && apt-get install -y build-essential bsdmainutils python3 git
+            make TARGET_SWITCH=1 -j\$(nproc)
+          "
+      - name: Upload Finished File
+        uses: actions/upload-artifact@v4
+        with:
+          name: Mario64-Switch
+          path: build/us_switch/*.nro
