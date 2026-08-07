@@ -1,5 +1,12 @@
 name: Build for Switch
-on: workflow_dispatch
+on:
+  workflow_dispatch:
+    inputs:
+      rom_file:
+        description: 'Drag and drop your baserom.us.z64 file here'
+        required: true
+        type: string
+
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -7,9 +14,9 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Set up devkitPro Docker
+      - name: Save Uploaded ROM Content
         run: |
-          docker pull devkitpro/devkita64:latest
+          echo "${{ github.event.inputs.rom_file }}" > baserom.us.z64
 
       - name: Build Game inside Docker
         run: |
