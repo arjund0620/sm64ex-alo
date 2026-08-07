@@ -29,3 +29,4 @@ jobs:
         with:
           name: Mario64-Switch
           path: build/us_switch/*.nro
+          #
